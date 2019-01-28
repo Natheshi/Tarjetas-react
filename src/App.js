@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import {todos} from  './todos.json'
 import './App.css';
+import TodoForm from "./components/TodoForms";
 
 
 class App extends Component {
@@ -9,8 +9,25 @@ class App extends Component {
         super();
         this.state = {
         todos
-        }
+        };
+        this.handleAddTodo=this.handleAddTodo.bind(this)
     }
+
+    handleAddTodo(todo){
+        this.setState({
+        todos: [...this.state.todos, todo]
+        })
+    }
+
+    removeTodo(index){
+        this.setState({
+            todos: this.state.todos.filter((e, i) =>{
+                return i !== index
+            })
+        })
+    }
+
+
   render() {
     const todos = this.state.todos.map((todo, i) =>{
         return (
@@ -26,6 +43,12 @@ class App extends Component {
                     <p>{todo.description}   </p>
                     <p><mark>{todo.responsible}</mark></p>
                 </div>
+                <div className="card-footer">
+                    <button className="btn btn-danger" onClick={this.removeTodo.bind(this, i)}>
+                        Delete
+
+                    </button>
+                </div>
             </div>
             </div>
         )
@@ -33,27 +56,24 @@ class App extends Component {
     return (
       <div className="App">
 
-          <nav className="navbar navbar-dark bg-dark">
+          <nav className="navbar navbar-light bg-light">
             Tasks
               <span className="badge badge-pill badge-light ml-2">
                   {this.state.todos.length}
               </span>
-            <a href="" className="text-white">
-
-            </a>
+            <a href="" className="text-white"> </a>
           </nav>
 
           <div className="container">
-              <div className="row mt-4">
+              <div className="row">
                   {todos}
               </div>
-
-
           </div>
-
-          <img src={logo} className="App-logo" alt="logo" />
-
-
+        <div className={"container"}>
+              <div className=" ml-7 mt-4">
+                  <TodoForm onAddTodo={this.handleAddTodo}/>
+              </div>
+        </div>
       </div>
     );
   }
